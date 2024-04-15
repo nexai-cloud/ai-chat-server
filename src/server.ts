@@ -53,11 +53,7 @@ const sendChatToAi = async (msg: IoChatMsg) => {
       projectId: msg.projectId
     })
   })
-  if (resp.ok) {
-    return  await resp.json() as AiApiResponse
-  } else {
-    throw new Error('Failed to get AI chat response')
-  }
+  return  await resp.json() as AiApiResponse
 }
 
 const sendSupportChat = async (msg: IoChatMsg) => {
@@ -74,11 +70,7 @@ const sendSupportChat = async (msg: IoChatMsg) => {
       projectId: msg.projectId
     })
   })
-  if (resp.ok) {
-    return await resp.json()
-  } else {
-    throw new Error('Failed to get support chat response')
-  }
+  return await resp.json()
 }
 
 const sessions = io.of(/^\/session\/\w+$/);

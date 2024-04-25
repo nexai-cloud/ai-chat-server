@@ -4,7 +4,8 @@
   "description": "Nexai Socket.io chat server",
   "main": "index.ts",
   "scripts": {
-    "start": "npx tsx index.ts"
+    "start": "npx tsx index.ts",
+    "dev": "nodemon -e 'ts,tsx' -w 'src/**' -x npx tsx index.ts"
   },
   "keywords": [],
   "author": "",

@@ -3,22 +3,9 @@ import { createServer, type Server as HTTPServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { randomUUID } from './lib/utils';
 import debug from 'debug'
-import { NexaiChatMessage } from './types';
+import { AiApiResponse, IoChatMsg } from './types';
 
 const log = debug('nexai:server')
-
-export type IoChatMsg = {
-  userUid: string;
-  projectId: string;
-  sessionKey: string;
-  message: string;
-  fromName: string;
-  toName: string;
-  sources?: string[];
-  aiMuted?: boolean;
-  avatarUrl?: string;
-  email?: string;
-}
 
 const PORT: number = parseInt(process.env.PORT as string, 10) || 8080;
 
@@ -35,8 +22,6 @@ const apiUrl = process.env.API_URL || 'https://nexai.site/api/nexai'
 // app.get('/', (_: Request, res: Response) => {
 //   res.sendFile(join(process.cwd(), 'index.html'));
 // });
-
-type AiApiResponse = { message: NexaiChatMessage, sources: string[] }
 
 const sendChatToAi = async (msg: IoChatMsg) => {
   const url = `${apiUrl}/chat`

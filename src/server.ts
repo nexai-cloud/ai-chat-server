@@ -1,9 +1,10 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { createServer, type Server as HTTPServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { randomUUID } from './lib/utils';
 import debug from 'debug'
-import { AiApiResponse, IoChatMsg } from './types';
+import { IoChatMsg } from './types';
+import { sendChatToAi, sendSupportChat } from './lib/api.service';
 
 const log = debug('nexai:server')
 
@@ -17,46 +18,9 @@ const io = new SocketIOServer(server, {
   },
 });
 
-const apiUrl = process.env.API_URL || 'https://nexai.site/api/nexai'
-
-// app.get('/', (_: Request, res: Response) => {
-//   res.sendFile(join(process.cwd(), 'index.html'));
-// });
-
-const sendChatToAi = async (msg: IoChatMsg) => {
-  const url = `${apiUrl}/chat`
-  log('sendChattoAi', { url, msg })
-  const resp = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      fromName: msg.fromName,
-      message: msg.message,
-      sessionId: msg.sessionKey,
-      projectId: msg.projectId
-    })
-  })
-  return  await resp.json() as AiApiResponse
-}
-
-const sendSupportChat = async (msg: IoChatMsg) => {
-  const resp = await fetch(`${apiUrl}/chat/support`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      userUid: 'support',
-      fromName: msg.fromName,
-      message: msg.message,
-      sessionId: msg.sessionKey,
-      projectId: msg.projectId
-    })
-  })
-  return await resp.json()
-}
+app.get('/', (_: Request, res: Response) => {
+  res.send('Nexai Chat Server. Hello.')
+});
 
 const sessions = io.of(/^\/session\/\w+$/);
 
